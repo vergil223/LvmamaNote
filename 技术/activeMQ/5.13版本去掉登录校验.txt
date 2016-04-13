@@ -1,0 +1,7 @@
+conf/jetty.xml里面把securityConstraint里的authenticate改成false
+<bean id="securityConstraint" class="org.eclipse.jetty.util.security.Constraint">
+        <property name="name" value="BASIC" />
+        <property name="roles" value="user,admin" />
+        <!-- set authenticate=false to disable login -->
+        <property name="authenticate" value="false" />
+    </bean>

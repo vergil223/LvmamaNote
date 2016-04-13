@@ -1,0 +1,5 @@
+1. 在命令前加上setsid可以让命令在后台运行，不会因为ctrl+C被中断。
+比如：setsid ping www.baidu.com
+
+2. 在命令前加上nohup，后面加上&
+比如：nohup ping www.baidu.com &

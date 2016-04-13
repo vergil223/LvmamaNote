@@ -1,0 +1,3 @@
+高欣：
+如果要在sync trigger里手动同步tnt_product这个模板，应该用TNT_PRODUCT中BRANCH_TYPE是PRODUCT的那条记录的TNT_PRODUCT_ID作为pkValue。
+正常业务中，这个sync trigger是由vst产品模块触发的。

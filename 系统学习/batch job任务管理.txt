@@ -1,0 +1,15 @@
+系统管理->任务管理
+
+job的维护：
+/super_back/pub/toComTaskList.do
+ComTaskAction
+
+com_task_list.jsp
+edit_com_task.jsp
+
+[DB]
+COM_TASK
+
+job的执行是由super_back的ComTaskExecuteJob做的。这个类在applicationContext-back-trigger.xml中配置了spring定时任务。
+
+现在job是被放到ComTaskThreadPoolFactory的一个Executors.newCachedThreadPool()里面执行的，如果job过多并且执行时间过长的话，会有资源耗尽的危险。

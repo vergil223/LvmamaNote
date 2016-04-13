@@ -1,0 +1,12 @@
+du -mS --all|sort -nr|head
+
+21205   ./tnt_front/192.168.10.150
+17643   ./payment/192.168.10.69
+17625   ./tnt_front/192.168.10.170
+15532   ./super_service/192.168.50.175
+15462   ./vst_passport/192.168.30.122
+15042   ./vst_prodcal/192.168.30.175/catalina.out
+15042   ./vst_prodcal/192.168.30.175
+14282   ./vst_prodcal/192.168.50.163/catalina.out
+14282   ./vst_prodcal/192.168.50.163
+10386   ./super_service/192.168.50.175/catalina.out

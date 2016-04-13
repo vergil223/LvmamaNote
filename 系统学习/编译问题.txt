@@ -1,0 +1,66 @@
+iframeRedirect('/vst_back/prod/product/findProductList.do','3480');--404
+iframeRedirect('/pet_back/shop/shopProduct/queryProductList.do?query=N  ','3018');--OK
+
+
+192.168.0.172
+http://192.168.0.172/vst_back/prod/product/findProductList.do
+http://localhost:8081/vst_back/prod/product/findProductList.do
+http://192.168.0.172/pet_back/login.do
+http://192.168.0.172:8080/pet_back/login.do
+
+http://192.168.0.76/pet_back/index.do
+http://192.168.0.76/pet_back/login.do
+
+http://super.lvmama.com/pet_back/index.do
+
+super_back报错：
+org/codehaus/xfire/spring/xfire.xml
+
+vst_comm
+java.lang.ClassNotFoundException: com.lvmama.comm.pet.fs.client.FSClient
+Caused by: java.lang.ClassNotFoundException: com.lvmama.vst.comm.jms.MessageProcesser
+com/lvmama/vst/comm/mybatis/MyBatisDao.class
+
+
+eclipse server下部署的文件在
+E:\workspaces\workspace_tracker\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\super_back\WEB-INF\lib下
+
+<dependency>
+		  <groupId>pom_base</groupId>
+		  <artifactId>vst_pom_base</artifactId>
+		  <version>0.0.1</version>
+		  <type>pom</type>
+		</dependency>
+
+
+lvmama_comm:
+<resources>
+			<resource>
+				<directory>src/main/config</directory>
+		        <excludes>
+		          <exclude>*.properties</exclude>
+		        </excludes>
+			</resource>
+		</resources>
+vst_comm:
+<resources>
+            <resource>
+                <directory>src/main/config</directory>
+                <excludes>
+                    <exclude>*.properties</exclude>
+                </excludes>
+            </resource>
+            
+              <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>  
+            </resource>
+            
+        </resources>
+
+
+\.metadata\.plugins\org.eclipse.core.resources\目录下有一个.snap文件，把它删除掉
+删除\workspace\.metadata\.plugins\org.eclipse.e4.workbench

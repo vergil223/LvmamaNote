@@ -1,0 +1,26 @@
+/super_back/prod/modelPropertyList.do
+
+ProductPropertyManagerAction.modelPropertyList()
+
+product_modelProperty_list.jsp
+product_editModelProperty.jsp
+
+
+/META-INF/hessian/serializers
+内容：java.math.BigDecimal=com.caucho.hessian.io.BigDecimalDeserializer
+
+/META-INF/hessian/deserializers
+内容：java.math.BigDecimal=com.caucho.hessian.io.StringValueSerializer
+
+
+
+$("#editSupplier").showWindow();
+<div id="editSupplier" url="${basePath}/sup/toAddSupplier.do"></div>
+
+EditSupplierAction.toAdd()
+edit_supplier.jsp
+
+打开窗口并传参
+		$("#editSupplier").showWindow({
+			url:basePath+"/sup/toEditSupplier.do",
+			data:{"supplierId":supplierId}});

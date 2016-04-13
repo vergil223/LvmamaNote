@@ -1,0 +1,36 @@
+入口：LoginAction.login()
+com.lvmama.comm.filter.PermissionFilter会校验是否登录，以及是否直接通过URL访问了权限外的页面
+
+
+【table】
+pet_back用户表：PERM_USER, password以明文存放
+pet_back role表：PERM_ROLE
+pet_back user和role的关联表：PERM_USER_ROLE
+菜单表：PERM_PERMISSION
+role和菜单关联表：PERM_ROLE_PERMISSION
+
+【逻辑】
+pet_back把用SESSION_BACK_USER为key把PremUser对象放到一个map中，这个map对应了memcached里lvsessionid这个key。memcached地址在memcached.properties里
+,local dev用的是127.0.0.1:11211。
+其他子系统因为域名相同，所以可以共享cookie里的lvsessionid。
+
+super_back：/super_back/orderComment/goCatchOrder.do(手动返现)，配置的memcached地址和pet_back相同，所以可以正常访问。 
+
+vst_back: /vst_back/prod/product/findProductList.do(标准产品管理)配置的memcached是192.168.0.89:12000，所以取不到session里的登录信息，导致登录失败。
+
+下面是3个系统登录时的日志内容：
+---------------
+pet_back:
+lvsessionid in cookie:4baa7ca9-9395-4c8b-8bcd-51290db62f7d_16979929
+session in memcached:{SESSION_BACK_USER=com.lvmama.comm.pet.po.perm.PermUser@3d0fecad, LAST_UPDATE_TIME=1431601280478, ver=0, SESSION_LOGIN_FROM=SUPER}
+
+super_back:
+lvsessionid in cookie:4baa7ca9-9395-4c8b-8bcd-51290db62f7d_16979929
+session in memcached:{SESSION_BACK_USER=com.lvmama.comm.pet.po.perm.PermUser@6733fa82, LAST_UPDATE_TIME=1431601280478, ver=0, SESSION_LOGIN_FROM=SUPER}
+
+
+vst_back:
+lvsessionid in cookie:4baa7ca9-9395-4c8b-8bcd-51290db62f7d_16979929
+session in memcached:{LAST_UPDATE_TIME=1431601525220, ver=0}
+------------------
+

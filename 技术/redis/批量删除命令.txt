@@ -1,0 +1,2 @@
+删除所有以20151112_com开头的KEY:
+redis-cli KEYS "*DubboServiceDayIP*"|xargs redis-cli DEL

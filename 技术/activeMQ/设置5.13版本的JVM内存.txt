@@ -1,0 +1,1 @@
+修改bin/env文件里的ACTIVEMQ_OPTS_MEMORY="-Xms64M -Xmx1G"

@@ -1,0 +1,2 @@
+登录对应的vst_search机器，执行：
+sudo /opt/lvmama_index/createIndex.sh r true

@@ -1,0 +1,56 @@
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+<body>
+
+<select id="resourceId" name="resourceId" class="validate[required]"></select>
+<select id="search.propId_eq" name="propId" class="validate[required]"></select>
+ <script type="text/javascript"> 
+ 
+
+
+
+
+
+
+
+
+ $(function(){             
+	 var jsonData1=[{"id":"8","value":"defaultTomcatFolderName"},{"id":"1","value":"http1.1_port"},{"id":"4","value":"PROP_NAME_FILE_NAME"},{"id":"2","value":"PROP_NAME_LOCAL_FILE_PATH"},{"id":"3","value":"PROP_NAME_REMOTE_FILE_PATH"},{"id":"7","value":"server_xml_displayName"},{"id":"6","value":"server_xml_docBase"},{"id":"9","value":"server_xml_path"},{"id":"5","value":"targetTomcatFolderName"},];
+
+	 $.each(jsonData1, function(i, item) {                                   
+ 			    var selected="";
+				var propId_value;
+ 			    if(propId_value==item.id){                                   
+			       selected="selected";                                
+ 			    }                                   
+ 				$('#search\\.propId_eq').append("<option value="+item.id+" "+selected+" >"+item.value+"</option>"); 
+ 			}); 
+
+//alert('test function()');
+//      var propId_value;                                                         
+// 		var initParentId=$('#resourceId').find('option:selected').val();            
+//		var initParentId=1;
+//		$.getJSON("http://localhost:8080/theone-web/sceneResourceProp/getPropsBySceneResourceId?parentId="+initParentId, function(jsonData) {            	
+// 			$.each(jsonData, function(i, item) {                                   
+// 			    var selected="";                                   
+//			    if(propId_value==item.id){                                   
+// 			       selected="selected";                                
+//			    }                                   
+// 				$('#propId').append("<option value="+item.id+" "+selected+" >"+item.value+"</option>"); 
+//			});                                                                         
+// 		});                                                                           
+// 	$('#resourceId').change(function(){                                       
+//alert('test change()');
+// 		$('#propId').empty();                                                         
+// 		$('#propId').append("<option selected>Please Select</option>");               		                                                                              
+// 		var parentId=$('#resourceId').find('option:selected').val();            
+// 		$.getJSON("http://localhost:8080/theone-web/sceneResourceProp/getPropsBySceneResourceId?parentId="+parentId, function(jsonData) {            	
+// 			$.each(jsonData, function(i, item) {                                   
+// 				$('#propId').append("<option value="+item.id+">"+item.value+"</option>"); 
+// 			});                                                                         
+// 		});                                                                           
+ //});                                                                               
+});                                                                               
+ </script>
+ </body>
+ </html>

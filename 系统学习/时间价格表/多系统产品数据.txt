@@ -1,0 +1,48 @@
+1. VST新增一个产品，是怎么同步到LVMAMA_SUPER.PROD_PRODUCT, LVMAMA_SUPER.PROD_PRODUCT_BRANCH里的？
+【答】
+VST新建产品往Super的下面几个表插入数据：
+LVMAMA_SUPER.META_PRODUCT
+LVMAMA_SUPER.META_PRODUCT_BRANCH
+LVMAMA_SUPER.PROD_PRODUCT
+LVMAMA_SUPER.PROD_PRODUCT_BRANCH
+是通过JMS做的
+VSTTimePriceProcesser
+com.lvmama.comm.bee.po.meta.MetaProductBranch.VST_PACK_TYPE
+
+VST新建产品后会调用TNT接口往LVMAMA_PET.TNT_PRODUCT插入数据（左小帅：这个逻辑找胡培培，胡培培：com.lvmama.tnt.coupon.service.TntGoodsChannelCouponServiceImpl.pushData(Long, Long, String, List<String>)），然后同步更新LVMAMA_PET.SYNC_TRIGGER通过异构数据同步写入
+VST_SEARCH_PROD_DISTRIBUTOR
+
+2. VST,、SUPER、TNT的产品在数据库里是怎么关联起来的？
+【答案】TNT_PRODUCT.PRODUCT_ID等于VST Product ID
+LVMAMA_SUPER.UNITY_PRODUCT如果Platform为VST，那么PRODUCT_ID等于VST Product ID
+
+3. LVMAMA_SUPER.UNITY_ORDER和LVMAMA_SUPER.UNITY_ORDER_ITEM里的PLATFORM字段代表订单是哪个系统下单的吗？
+如果我要获取某个产品在所有渠道（包括分销）的销售数量，是不是查LVMAMA_SUPER.UNITY_ORDER和LVMAMA_SUPER.UNITY_ORDER_ITEM就可以了？
+【答】左小帅说老系统产品和新系统产品没有技术上的关联关系，所以现在只能统计VST创建的产品订单
+
+4. SyncExecuteServiceImpl.updateVstSearchPrice()更新LVMAMA_VER.VST_SEARCH_PROD_DISTRIBUTOR的时候还会往LVMAMA_VER.COM_PUSH写一条记录。
+LVMAMA_VER.COM_PUSH是做什么用的？
+【答】COM_PUSH是用来通知搜索更新增量索引的
+
+彭飞：更新VST起价updateProdBranchLowestPriceByProdBranchId()
+
+5. VST新建的产品，如果在VST或者分销下单的话，怎么找到对应的订单？
+unity_order。左小帅： 不管在哪里下单，只要产品是VST新建的platform就是VST
+
+6. lvmama_super.meta_product_branch.product_id_supplier对于un_pack类型，就是VST goods id
+
+7. 线路产品如果是lvmama打包，需要在分销手动建销售套餐。如果是供应商打包，会在处理消息的时候自动建一个销售套餐
+手动发message的groovy脚本：
+import com.lvmama.pet.sync.service.util.SyncExecutor;
+import com.lvmama.pet.sync.service.SyncDataContext;
+import com.lvmama.comm.sync.po.SyncTrigger;
+Integer execute(Object param, Map<String, javax.sql.DataSource> dsMap, String sourceId) {
+	  SyncTrigger trigger = (SyncTrigger) SyncDataContext.get(SyncDataContext.TRIGGER_DATA);
+	
+	  com.lvmama.comm.jms.Message msg = com.lvmama.comm.jms.MessageFactory.newVSTCommonessage(trigger.getFieldTwo(), Long.parseLong(sourceId), trigger.getFieldOne(), trigger.getFieldThree());
+	  com.lvmama.comm.jms.TopicMessageProducer productMessageProducer = (com.lvmama.comm.jms.TopicMessageProducer) com.lvmama.comm.spring.SpringBeanProxy.getBean("productMessageProducer");
+	  productMessageProducer.sendMsg(msg);	
+	  return 1;
+}
+
+field1=VST_ROUTE_PRODUCT,field2=VST_ROUTE_PRODUCT

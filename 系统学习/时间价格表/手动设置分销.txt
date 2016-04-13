@@ -1,0 +1,12 @@
+ProductDistSetController.whiteChannel()--设置为分销
+ProductDistSetController.blackChannel()--设置为不分销
+
+TntProductUserServiceImpl.whiteChannel()调用的其中一个listener TimePriceCreateDistSetListener会调用TntTimePriceServiceImpl.findProdProductBranchWithCreate()来调用super的autopackage()
+
+TntProductUserServiceImpl.blackChannel()会调用ProductOnOffLineDistSetListener.notDistDeal()发送消息:
+productMessageProducer.sendMsg(MessageFactory.newDistribuionProductDeleteMessage(dealVo.saleUnitId, dealVo.userIds));
+
+
+
+--VST
+pushAdapterService.push(suppGoods.getSuppGoodsId(), ComPush.OBJECT_TYPE.GOODS, ComPush.PUSH_CONTENT.SUPP_GOODS, ComPush.OPERATE_TYPE.ADD);--参数依次为objectId, object type, content, operate type

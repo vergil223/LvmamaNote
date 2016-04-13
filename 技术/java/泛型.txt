@@ -1,0 +1,14 @@
+著作权归作者所有。
+商业转载请联系作者获得授权，非商业转载请注明出处。
+作者：RednaxelaFX
+链接：http://www.zhihu.com/question/36645143/answer/68650398
+来源：知乎
+
+Java不是运行时擦出泛型的吗？Java 5起提供的泛型是“编译时擦除”方式实现的。放个传送门：Reifiable generics与Type erasure generics各有怎样的优点与缺点？ - RednaxelaFX 的回答为何又要提供额外的获取泛型的方法？因为Java泛型的擦除并不是对所有使用泛型的地方都会擦除的，部分地方会保留泛型信息。最典型的地方就是一个非泛型类可以继承一个泛型基类，例如：public class Base<T> { }
+public class Derived extends Base<String> { }
+此例中Base是泛型类，有一个未绑定的泛型类型变量T。而Derived是非泛型类，并没有任何未绑定的泛型变量；它所继承的不是Base<T>，而是将T绑定为String的Base<String>。于是，对Derived.class调用getGenericSuperclass()，就可以进一步获取到T所绑定的String类型。但上面的例子里，如果我们只是要知道String的话，何不直接找个地方记录下String.class呢？用非泛型类继承泛型类还能做什么事情？试想，如果我们想在Java程序里用一个变量记录下 Map<String, List<String>> 这样的类型信息，我们可以怎么做？或许有人会觉得可以这样：Class<?> c = Map<String, List<String>>.class;
+然而这并不符合Java语法，所以不能这样写。但我们可以这样写：Type t = new Base<Map<String, List<String>>>() {
+         }.getClass().getGenericSuperclass();
+Type targ = ((ParameterizedType) t).getActualTypeArguments()[0];
+其中Type是java.lang.reflect.Type。这样我们得到的targ表示的就是：java.util.Map<java.lang.String, java.util.List<java.lang.String>>
+（System.out.println(targ)的结果）是否推荐在项目中使用这些方法？其实还挺常用的，特别是在涉及泛型的对象的序列化/反序列化上。Gson的TypeToken中使用getGenericSuperclass()的例子：gson/TypeToken.java at 2b15334a4981d4e0bd4f2c2d34b8978a4167f36a · google/gson · GitHub用的正是上面Base<T>所展示的技巧。Guice的TypeLiteral中使用getGenericSuperclass()的例子：guice/TypeLiteral.java at abc78c361d9018da211690b673accb580a52abf2 · google/guice · GitHub<- 这俩其实是同一作者所以代码相似也不奇怪

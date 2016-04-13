@@ -1,0 +1,1 @@
+select t.table_name,t.table_rows,t.data_length,t.avg_row_length from information_schema.tables t order by t.data_length desc;

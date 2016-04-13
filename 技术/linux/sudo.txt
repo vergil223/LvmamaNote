@@ -1,0 +1,6 @@
+问题：用jsch代码调用shell命令的时候报错： sudo: sorry, you must have a tty to run sudo
+解决方案：
+vi /etc/sudoers (最好用visudo命令)
+注释掉 Default requiretty 一行
+
+用sudo su root可以把当前用户切换成root，并且不需要输入root的密码

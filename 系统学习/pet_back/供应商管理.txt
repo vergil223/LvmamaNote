@@ -1,0 +1,6 @@
+/pet_back/sup/index.do
+SupplierListAction
+supplier_list.jsp
+
+EditSupplierAction
+edit_supplier.jsp

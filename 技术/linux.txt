@@ -1,0 +1,34 @@
+[Linux下的域名解析]
+第一个/etc/host.conf，linux中通过解析库将host name解析成ip地址，而host.conf则告诉linux用什么方式去解析。通过编辑/etc/host.conf来添加相关条目，举例子
+
+# Lookup names via DNS first then fall back to /etc/hosts.
+            order bind,hosts
+            # We have machines with multiple IP addresses.
+            multi on
+            # Check for IP address spoofing.
+            nospoof on
+
+常用的就是oder，multi，nospoof这三项。
+
+order：通过什么顺序来解析host name，这里表示先通过name server解析host name，然后通过查找/etc/hosts文件。 bind(Berkeley Internet Name Domain)，一种开源DNS协议实现。
+
+multi on：如果你的机器有多网卡，那么这个就设置为on
+
+nospoof on：这个主要是从安全考虑，防止黑客攻击，原理我也不大清楚，默认就是on的
+
+ 
+
+第二个/etc/hosts，在上面提到了当设置了order里面包含hosts，那么表示要查找这个/etc/hosts文件（前提当然是在name server里面没找到，或是hosts的顺序在bind之前），可以编辑/etc/hosts
+
+格式为：
+
+ip地址  域名 别名， 比如 192.169.131.2  www.example.com example.com
+
+
+第三个为/etc/resolv.conf(不是resolve.conf) ，这个是记录的域名服务器，name server
+
+常见的有下面几种类型
+
+domain   your_domain
+
+nameserver  ip_address

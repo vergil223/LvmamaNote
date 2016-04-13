@@ -1,0 +1,49 @@
+pet_back： admin/111111
+
+struts2 action名字用annotation定义
+
+[内部系统远程调用]
+用的是使用Hessian。客户端在spring配置文件中定义hessian proxy:
+<bean id="shopProductService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl" value="http://localhost:8080/pet_public/remoting/shopProductService" />
+		<property name="serviceInterface" value="com.lvmama.comm.pet.service.shop.ShopProductService" />
+		<property name="chunkedPost" value="false" />
+		<property name="overloadEnabled" value="true" />
+	</bean>	
+
+
+服务端在spring配置文件中定义hessian service:
+<bean name="/shopProductService" class="org.springframework.remoting.caucho.HessianServiceExporter">
+		<property name="service" ref="shopProductService"/>
+		<property name="serviceInterface" value="com.lvmama.comm.pet.service.shop.ShopProductService"/>
+	</bean>
+
+然后服务端会由spring DispatcherServlet来处理所有/remoting/*类型的请求，从而调用到hessian service：
+<servlet>
+		<servlet-name>service</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/service-servlet.xml,classpath:applicationContext-pet-public-mvc.xml</param-value>
+        </init-param>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>service</servlet-name>
+		<url-pattern>/remoting/*</url-pattern>
+	</servlet-mapping>
+
+
+[pet_peak]
+1. 运营管理->积分商城->商城产品管理
+NewListProductAction 里的ShopProductService是怎么注入的？通过debug看到的是一个Hessian的proxy对象
+
+答案--关于struts2 filter和spring的关系：项目中有struts2-spring-plugin-2.3.16.2.jar这个包，就会自动在org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter中通过spring创建名字相符的bean。
+而ShopProductService这个proxy bean是定义在lvmama_common的applicationContext-lvmama-comm-remote.xml中的，这个文件会在maven build的时候引入到pet_peak
+
+
+[pet_public]
+service-servlet.xml里面定义了供远程调用的Hessian Service
+
+
+

@@ -1,0 +1,1 @@
+ftp -i -s:E:\note\linux\ftp上传文件脚本\func.txt 192.168.0.71

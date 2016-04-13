@@ -1,0 +1,9 @@
+1. 检查锁和解锁
+检查锁：
+SELECT object_name, machine, s.sid, s.serial# 
+FROM gv$locked_object l, dba_objects o, gv$session s 
+WHERE l.object_id　= o.object_id 
+AND l.session_id = s.sid;
+
+终止锁相关的sessin，参数格式是SID+SERIAL#
+ALTER system kill session '1491, 26512'; 

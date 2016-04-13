@@ -1,0 +1,24 @@
+DubboNamespaceHandler用来解析dubbo的spring自定义标签
+
+<dubbo:reference>
+ReferenceBean.afterPropertiesSet()
+
+ReferenceConfig.get()->init()->createProxy()
+ReferenceConfig.refprotocol=ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension()--参照com.alibaba.dubbo.rpc.Protocol实例是com.alibaba.dubbo.registry.integration.RegistryProtocol
+
+
+RegistryProtocol.refer()->doRefer()
+
+RegistryDirectory.subscribe()  RegistryDirectory实现了NotifyListener接口，会响应注册中心的变化
+
+FailbackRegistry.subscribe()
+
+ZookeeperRegistry.doSubscribe()->notify()->doNotify()
+
+AbstractRegistry.notify()
+
+RegistryDirectory.notify()->refreshInvoker()->toInvokers()这里RegistryDirectory.protocol好像是DubboProtocol？
+
+DubboProtocol.refer()->getClients()->getSharedClient()->initClient()这里有是否lazy的逻辑
+
+

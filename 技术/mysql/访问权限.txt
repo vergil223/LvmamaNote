@@ -1,0 +1,6 @@
+1.修改权限 
+执行命令：GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.0.%' IDENTIFIED BY '123456' WITH GRANT OPTION;
+或者直接改mysql这个数据库的user表
+
+2.使设置的权限生效
+FLUSH PRIVILEGES;

@@ -1,0 +1,26 @@
+要达到释放缓存的目的，我们首先需要了解下关键的配置文件/proc/sys/vm/drop_caches。这个文件中记录了缓存释放的参数，默认值为0，也就是不释放缓存。他的值可以为0~3之间的任意数字，代表着不同的含义：
+
+0 – 不释放
+1 – 释放页缓存
+2 – 释放dentries和inodes
+3 – 释放所有缓存echo 3 > /proc/sys/vm/drop_caches
+
+
+#echo 3 > /proc/sys/vm/drop_caches
+
+
+此指令输入后会立即生效，可以查询现在的可用内存明显的变多了。
+
+要查询当前缓存释放的参数，可以输入下面的指令： 
+
+#cat /proc/sys/vm/drop_caches
+
+#free -m
+
+对于清除swap，只有先关闭swap了，用：
+
+#swapoff -a
+
+而后启用swap，因为只是清除，不是说不要用swap的嘛 ：
+
+#swapon -a

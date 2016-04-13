@@ -1,0 +1,4 @@
+select * from lvmama_ver.vst_search_aggr;
+只有这个sql配置的ip才可以建增量索引，并且增量索引对连同一个数据库的其他机器无效。
+需要用下面的命令手动重建索引才可以：
+sudo /opt/lvmama_index/createIndex.sh r true

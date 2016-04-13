@@ -1,0 +1,38 @@
+--周一环境 TNT 线路产品学习
+
+--product_id:287933  wangxm_起价和可售测试1勿动  有效  否  跟团游  国内-短线  自主套餐  半自助	有		1	5	5	美国	包含套餐
+
+--【VST】
+select * from LVMAMA_VER.biz_district--出发地定义表
+
+select * from LVMAMA_VER.PROD_PRODUCT t where t.product_id=287933;
+select * from LVMAMA_VER.PROD_PACKAGE_GROUP t where t.product_id=287933;
+select * from LVMAMA_VER.PROD_PACKAGE_GROUP_TRANSPORT t where t.group_id=3151;
+select * from LVMAMA_VER.PROD_PACKAGE_DETAIL t where group_id=3151;
+/*产品类型	产品ID	产品名称	产品状态	规格ID	规格名称	规格状态	是否参考消息	销售价规则
+大交通	287934	wangxm_起价和可售测试1勿动	有效	1082495	经济舱	无效	是	利润： 100.0%*/
+select * from LVMAMA_VER.PROD_PRODUCT t where t.product_id=287933;
+select * from LVMAMA_VER.Supp_Goods t where  t.product_id=287934;
+select * from LVMAMA_VER.Prod_Product_Branch t where t.product_branch_id=1082495;
+
+
+--【TNT】
+select * from LVMAMA_PET.TNT_PRODUCT t where t.product_id=287933;
+select * from LVMAMA_PET.TNT_SELL_PACKAGE t where t.product_id=287933;
+select * from LVMAMA_PET.TNT_SELL_PACKAGE_RELATION t where t.product_id=287933;--TNT_SELL_PACKAGE_RELATION存放打包套餐和子产品的关系
+select * from LVMAMA_VER.PROD_PRODUCT t where t.product_id=287934;
+
+--RouteProductController.deletePackageGoods()会发送消息：MessageFactory.newSellPackageChangeMessage(Long.valueOf(tntSellPackageId), "PROD_PRODUCT", null)
+--消费者：VSTTimePriceProcesser，会调用autoPackage()
+
+
+--【super】
+select * from LVMAMA_SUPER.meta_product_branch t where t.meta_branch_id=1241371;
+select * from LVMAMA_SUPER.meta_product t where t.meta_product_id=110008;
+
+select * from LVMAMA_SUPER.UNITY_PRODUCT t where t.product_id=287933;
+select * from LVMAMA_SUPER.UNITY_PRODUCT_BRANCH t where t.product_id=287933;
+
+select * from LVMAMA_SUPER.PROD_PRODUCT t where t.sale_unit_id=677;
+select * from LVMAMA_SUPER.PROD_PRODUCT_BRANCH t where t.product_id=277470;
+select * from LVMAMA_SUPER.PROD_PRODUCT_BRANCH_ITEM t where t.prod_branch_id=1455406;

@@ -1,0 +1,2 @@
+在tomcat的server.xml里增加部署的应用：
+sed -i 's/<\/Host>/<Context displayName="pet_public" docBase="\/var\/www\/webapps\/pet_public" path="\/pet_public" reloadable="false"\/>\n\r<\/Host>/g' /theone/apache-tomcat-pet_service/conf/server.xml

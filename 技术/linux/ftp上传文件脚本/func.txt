@@ -1,0 +1,5 @@
+root
+8Jf1vM
+bin
+put f:\ftp\a.zip
+bye

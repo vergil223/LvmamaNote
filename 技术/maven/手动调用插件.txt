@@ -1,0 +1,2 @@
+prism项目执行sql的插件liquibase:
+在eclipse里执行run as->maven build...命令：liquibase:migrate -Pgd_172.17.12.106

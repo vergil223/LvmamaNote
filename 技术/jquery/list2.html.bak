@@ -1,0 +1,76 @@
+<!DOCTaYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta name="keywords" content=" keywords" />
+    <meta name="description" content="description" />
+</head>
+<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+<style type="text/css">
+    body{font-size:13px}
+    .clsInit{width:435px;height::35px;line-height:35px;padding-left:10px}
+    .clsTip{padding-top:5px;background-color:#eee;display:none}
+    .btn{border:solid 1px #666;padding:2px;width:65px;float:right;margin-top:6px;margin-right:6px;filter:progid:DXImageTransform.Mcrosoft.Gradient(GraientType=0,StartColorStr=#FFFFFF,EndColorStr=#ECE9D8);}
+</style>
+<body>
+
+
+<div class="clsInit">
+
+    国家：<select id="nation">
+	        <option value="1">Please Select</option>
+			<option value="1">中国</option>
+			<option value="2">美国</option>
+			<option value="3">日本</option>
+			<option value="4">虚拟</option>
+          </select>
+    城市：<select id="city"></select>
+
+<script type="text/javascript">
+
+
+    $(function(){
+		var jsonData=[
+				{"id":"41","value":"虚拟1"},
+				{"id":"42","value":"虚拟2"},
+				{"id":"43","value":"虚拟3"},
+				{"id":"43","value":"虚拟3"},
+            ];
+
+        $('#nation').change(function(){
+            $('#city').empty();
+			var nation=$('#nation').find('option:selected').val();
+            
+			if(1==nation){
+				$('#city').append("<option selected>Please Select</option>");
+				$('#city').append("<option value='11'>上海</option>");
+			    $('#city').append("<option value='12'>北京</option>");
+			}
+			if(2==nation){
+      			$('#city').append("<option selected>Please Select</option>");
+				$('#city').append("<option value='21'>纽约</option>");
+			    $('#city').append("<option value='22'>洛杉矶</option>");
+			}
+			if(3==nation){
+				$('#city').append("<option selected>Please Select</option>");
+				$('#city').append("<option value='31'>东京</option>");
+			    $('#city').append("<option value='32'>大阪</option>");
+			}
+			if(4==nation){
+				$('#city').append("<option selected>Please Select</option>");  
+
+						$.each(jsonData,function(i,item){
+							$('#city').append("<option value='"+item.id+"'>"+item.value+"</option>");
+						});
+			}
+        });
+    });
+</script>
+
+    <input type="button" value="查询" id="Button1" class="btn" />
+</div>
+<div class="clsInit" id="divTip"></div>
+
+</body>
+</html>

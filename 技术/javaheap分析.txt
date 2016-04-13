@@ -1,0 +1,4 @@
+[windows]
+ 打开cmd
+运行java -Xmx500m -jar F:\ftp\ha449.jar
+在图形界面打开对应的dump文件

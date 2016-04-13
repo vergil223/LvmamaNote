@@ -1,0 +1,5 @@
+Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources("com/alibaba/dubbo/registry/internal/DefaultRegistryService.class");
+while (urls.hasMoreElements()) {
+    URL url = urls.nextElement();
+    System.out.println(">>>>>>>>>>>>>>>>>>>>>>" + url.getFile());
+}

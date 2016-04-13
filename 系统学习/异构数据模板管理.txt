@@ -1,0 +1,28 @@
+【菜单】
+系统管理->异构数据模板管理
+
+【DB】
+lvmama_pet.SYNC_TEMPLATE
+lvmama_pet.sync_template_sql
+lvmama_pet.SYNC_TRIGGER
+
+/pet_back/sync/index.do
+
+SyncTemplateAction
+
+测试：SyncTemplateAction.testSyncTemplateSql()
+
+【逻辑】：
+1. 从源数据库用select语句抓取数据，作为target做insert/update/delete的输入参数
+2. 在target数据库按照顺序执行insert/update/delete
+3. datasource定义在pet_public的jdbc.properties里：
+	sync_super_jdbc
+	sync_pet_jdbc
+	sync_vst_jdbc
+	sync_weiyouBonus_jdbc
+	sync_weiyou_jdbc
+4. 业务模块修改定义数据之后，会在lvmama_pet.SYNC_TRIGGER中生成一条记录，就像ad hoc job.
+5. Batch job框架调用SyncExecuteJobServiceImpl，检查SYNC_TRIGGER中的待处理记录，在TARGET数据库执行对应的同步操作。
+
+【例子】（SYNC_TEMPLATE template_id=420）：
+在super新增了一个产品，调用 com.lvmama.prd.dao.ProdProductDAO.insert(),做完业务保存之后，会在SYNC_TRIGGER里面插入一条user name为LVMAMA_SUPER, table name为PROD_PRODUCT，datasourceid=superDataSource的记录。batch job触发同步，往super，pet对应的表里同步数据。

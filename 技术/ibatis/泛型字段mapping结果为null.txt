@@ -1,0 +1,7 @@
+可以在resultMap中明确指定泛型字段的javaType:
+<resultMap id="BaseResultMap"
+		type="com.lvmama.theone.build.entity.ToActionType" extends="BaseEntityMap">
+		<id column="ID" property="id" javaType="java.lang.Long"/>
+		<result column="ACTION_TYPE" property="actionType" />
+		...
+	</resultMap>

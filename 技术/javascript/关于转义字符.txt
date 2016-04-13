@@ -1,0 +1,6 @@
+如果要从后台传个message “与现有数据重叠：>=100001”到页面上alert，message的值是用struts2标签<s:property value="errMsg"/>获取的话，会被转义成：“与现有数据重叠：&gt;=100001”
+
+虽然在html上可以正常显示，但alert的话不会把&gt;转成>
+
+解决方式是，对于alert用的变量，用标签取值时增加属性escapeHtml="false"：
+<s:property value="errMsg" escapeHtml="false"/>

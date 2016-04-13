@@ -1,0 +1,2 @@
+会话存放路径：
+D:\SecureCRT\Config\会话

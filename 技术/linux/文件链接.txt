@@ -1,0 +1,5 @@
+»Ì¡¥Ω”
+ln -s  source_file softlink_file
+
+”≤¡¥Ω”
+ln -d existfile newfile
