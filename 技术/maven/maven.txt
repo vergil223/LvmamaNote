@@ -1,0 +1,5 @@
+【运行时指定本地仓库地址】
+mvn clean install -Dmaven.repo.local=/home/juven/myrepo/
+mvn clean install -Dsettings.localRepository=E:\maventest\localrepo
+
+如果是jenkins的话，可以在settings.xml里配置一个相对路径的本地仓库路径，然后在build->高级下面指定使用这个settings.xml，这样会在这个project的目录下新建一个本地仓库。

@@ -1,0 +1,58 @@
+ProtocolFilterWrapper.buildInvokerChain()会获得当前invoker允许的所有filter，组成调用链。可以在这里增加自己filter逻辑。
+
+会从下面3个路径获取扩展点类：
+META-INF/services/
+META-INF/dubbo/
+META-INF/dubbo/internal/
+
+调用堆栈：
+	at com.alibaba.dubbo.remoting.exchange.support.DefaultFuture.get(DefaultFuture.java:107)
+	at com.alibaba.dubbo.remoting.exchange.support.DefaultFuture.get(DefaultFuture.java:84)
+	at com.alibaba.dubbo.rpc.protocol.dubbo.DubboInvoker.doInvoke(DubboInvoker.java:113)
+	at com.alibaba.dubbo.rpc.protocol.AbstractInvoker.invoke(AbstractInvoker.java:144)
+	at com.alibaba.dubbo.rpc.listener.ListenerInvokerWrapper.invoke(ListenerInvokerWrapper.java:74)
+	at com.alibaba.dubbo.cache.filter.CacheFilter.invoke(CacheFilter.java:55)
+	at com.alibaba.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:91)
+	at com.alibaba.dubbo.monitor.support.MonitorFilter.invoke(MonitorFilter.java:83)
+	at com.alibaba.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:91)
+	at com.alibaba.dubbo.rpc.protocol.dubbo.filter.FutureFilter.invoke(FutureFilter.java:53)
+	at com.alibaba.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:91)
+	at com.alibaba.dubbo.rpc.filter.ConsumerContextFilter.invoke(ConsumerContextFilter.java:48)
+	at com.alibaba.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:91)
+	at com.alibaba.dubbo.rpc.protocol.InvokerWrapper.invoke(InvokerWrapper.java:53)
+	at com.alibaba.dubbo.rpc.cluster.support.FailoverClusterInvoker.doInvoke(FailoverClusterInvoker.java:77)
+	at com.alibaba.dubbo.rpc.cluster.support.AbstractClusterInvoker.invoke(AbstractClusterInvoker.java:227)
+	at com.alibaba.dubbo.rpc.cluster.support.wrapper.MockClusterInvoker.invoke(MockClusterInvoker.java:72)
+	at com.alibaba.dubbo.rpc.proxy.InvokerInvocationHandler.invoke(InvokerInvocationHandler.java:52)
+	at com.alibaba.dubbo.common.bytecode.proxy0.echoString(proxy0.java)
+	at com.lzy.test.dubbo.DubboTest.testDo(DubboTest.java:226)
+
+@SPI 说明是一个扩展点类型，比如Filter.class
+@Activate 是扩展点激活条件 比如@Activate(group = {"consumer"}, value = "cache")说明只对consumer并且有"cache"这个参数的invoker才激活本扩展点实现
+
+ExtensionLoader.getActivateExtension()参数例子:
+url:
+dubbo://172.17.11.20:20999/com.pub.api.SoaTestService?anyhost=true&application=zzTest&cache=lru&check=false&default.check=false&default.retries=0&default.timeout=1000&dubbo=2.5.3&interface=com.pub.api.SoaTestService&methods=getGenericList,autoIncrease,echoObject,echoList,echoString,echoMap,noReturn,noReturn2,exceptionMethod&pid=8948&side=consumer&timestamp=1460706578631
+
+
+cachedActivates:
+{
+activelimit=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[actives], group=[consumer]),
+classloader=@com.alibaba.dubbo.common.extension.Activate(after=[], order=-30000, before=[], value=[], group=[provider]),
+accesslog=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[accesslog], group=[provider]), 
+context=@com.alibaba.dubbo.common.extension.Activate(after=[], order=-10000, before=[], value=[], group=[provider]), 
+token=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[token], group=[provider]),
+exception=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[], group=[provider]), 
+validation=@com.alibaba.dubbo.common.extension.Activate(after=[], order=10000, before=[], value=[validation], group=[consumer, provider]),
+timeout=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[], group=[provider]),
+future=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[], group=[consumer]), 
+executelimit=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[executes], group=[provider]),
+deprecated=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[deprecated], group=[consumer]),
+consumercontext=@com.alibaba.dubbo.common.extension.Activate(after=[], order=-10000, before=[], value=[], group=[consumer]),
+generic=@com.alibaba.dubbo.common.extension.Activate(after=[], order=-20000, before=[], value=[], group=[provider]),
+monitor=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[], group=[provider, consumer]),
+trace=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[], group=[provider]),
+cache=@com.alibaba.dubbo.common.extension.Activate(after=[], order=0, before=[], value=[cache], group=[consumer, provider]),
+echo=@com.alibaba.dubbo.common.extension.Activate(after=[], order=-110000, before=[], value=[], group=[provider]),
+genericimpl=@com.alibaba.dubbo.common.extension.Activate(after=[], order=20000, before=[], value=[generic], group=[consumer])
+}

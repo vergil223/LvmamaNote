@@ -42,4 +42,3 @@ Warning: No grammar constraints (DTD or XML schema) detected for the document
 去除warning办法：
 以在Eclipse工具栏中 Windows - Preferences - XML - XML Files - Validate files -> Indicate when no grammar is specified 选择"ignore "
 再次右键项目，选择"Validate"
-另外，要修改Windows - Preferences - Validation，取消xml相关的checkbox

@@ -5,3 +5,19 @@
 		<result column="ACTION_TYPE" property="actionType" />
 		...
 	</resultMap>
+
+作为参数的地方也需要指定javaType，否则会报错：
+<update id="updateByID" parameterType="com.lvmama.theone.build.entity.ToResourceProp">
+		UPDATE TO_RESOURCE_PROP
+			SET ID=#{id,jdbcType=BIGINT,javaType=long}
+				<if test="createTime != null" >,CREATE_TIME=#{createTime}</if>
+				<if test="creatorId != null" >,CREATOR_ID=#{creatorId}</if>
+				<if test="description != null" >,DESCRIPTION=#{description}</if>
+				<if test="isValid != null" >,IS_VALID=#{isValid}</if>
+				<if test="propName != null" >,PROP_NAME=#{propName}</if>
+				<if test="resourceTypeId != null" >,RESOURCE_TYPE_ID=#{resourceTypeId}</if>
+				<if test="updateTime != null" >,UPDATE_TIME=#{updateTime}</if>
+				<if test="updaterId != null" >,UPDATER_ID=#{updaterId}</if>
+				<if test="defaultValue != null" >,DEFAULT_VALUE=#{defaultValue}</if>
+			where ID=#{id,jdbcType=BIGINT,javaType=long}
+	</update>

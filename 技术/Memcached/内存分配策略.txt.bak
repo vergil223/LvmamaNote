@@ -1,0 +1,18 @@
+原文链接：
+http://dev.mysql.com/doc/refman/5.7/en/ha-memcached-using-memory.html
+http://blog.itpub.net/15480802/viewspace-1422370/
+
+A slab may consist of multiple pages, and each page within a slab contains an equal number of chunks.
+
+
+memcache并不会监视和清理过期数据，而是在客户端get时检查，称为lazy expiration。
+item被检测到超时并不会被删除，而是放入slab->slots头部；
+
+1 slab在新加item时会先查看LRU队尾；
+2 如果队尾的item恰巧超时则重用，否则执行slabs_alloc；这一过程循环5次，若还没有找到可用item，则再次调用slabs_alloc；
+3 slabs_alloc依次尝试  
+  a.slab->slot即expired item链表；  
+  b.slab->end_page_ptr 最后一个页面的空闲item； 
+  c.分配新的内存页
+
+也就是说，只有LRU最后的5个元素状态为expired时，才有机会直接重用LRU，否则会依次尝试expired item list和slab的最后一个内存页的free item；

@@ -1,0 +1,14 @@
+ZookeeperRegistry.doSubscribe()
+->FailbackRegistry.notify()->doNotify()
+->AbstractRegistry.notify()
+->RegistryDirectory.notify()
+
+这里会区分子节点的类型：routers, configurators, providers
+再调用refreshInvoker()刷新本地缓存的invoker列表
+
+对configurators的覆盖是在RegistryDirectory.toInvokers()->mergeUrl()里做的
+对router的过滤是在RegistryDirectory.toMethodInvokers()->route()里做的
+
+注意这个参数：
+force=false
+当路由结果为空时，是否强制执行，如果不强制执行，路由结果为空的路由规则将自动失效，可不填，缺省为flase。

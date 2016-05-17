@@ -1,0 +1,23 @@
+把memcached-tool放到linux上，用perl memcached-tool {IP}:{PORT}查看memcache的情况
+
+说明：
+Usage: memcached-tool <host[:port] | /path/to/socket> [mode]
+
+
+      memcached-tool 10.0.0.5:11211 display    # shows slabs
+
+      memcached-tool 10.0.0.5:11211            # same.  (default is display)
+
+      memcached-tool 10.0.0.5:11211 stats      # shows general stats
+
+      memcached-tool 10.0.0.5:11211 settings  # shows settings stats
+
+      memcached-tool 10.0.0.5:11211 sizes      # shows sizes stats
+
+      memcached-tool 10.0.0.5:11211 dump      # dumps keys and values
+
+例子（显示内存分配状态）：
+[root@techtest-106 tmp]# perl memcached-tool 10.112.1.134:11211 display
+  #  Item_Size  Max_age  Pages  Count  Full?  Evicted Evict_Time OOM
+  1      96B       216s       1       2      no        0        0    0
+ 22    10.8K       216s       1       1      no        0        0    0
