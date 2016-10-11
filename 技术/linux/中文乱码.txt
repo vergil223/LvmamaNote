@@ -1,0 +1,2 @@
+可以输入bash切换linux命令行模式
+有时候用另一种模式启动tomcat，theone的导出功能遇到中文会乱码，切成bash就正常了。

@@ -1,0 +1,56 @@
+【String】:
+内部值用一个char[]来包含,并且没有提供修改这个char[]的方法.
+
+【StringBuilder】
+继承了AbstractStringBuilder。
+
+public StringBuilder append(String str) {
+        super.append(str);
+        return this;
+    }
+
+append(String)方法调用的是父类的append(String)：
+public AbstractStringBuilder append(String str) {
+        if (str == null) str = "null";
+        int len = str.length();
+	//首先保证有足够的空间做append
+        ensureCapacityInternal(count + len);
+	//用数组copy的方式把参数的value加到自己的char[]末尾
+        str.getChars(0, len, value, count);
+        count += len;
+        return this;
+    }
+
+检查容量、扩容：
+private void ensureCapacityInternal(int minimumCapacity) {
+        // overflow-conscious code
+        if (minimumCapacity - value.length > 0)
+            expandCapacity(minimumCapacity);
+    }
+
+void expandCapacity(int minimumCapacity) {
+	//首先在现有容量基础上翻倍再加2
+        int newCapacity = value.length * 2 + 2;
+
+        if (newCapacity - minimumCapacity < 0)
+	//如果还是不够，就设置成和这次需要的容量一样大
+            newCapacity = minimumCapacity;
+        if (newCapacity < 0) {
+            if (minimumCapacity < 0) // overflow
+                throw new OutOfMemoryError();
+	    //数组最大不能超过Integer.MAX_VALUE
+            newCapacity = Integer.MAX_VALUE;
+        }
+
+	//数组扩容，把内容复制到新的大容量数组里
+        value = Arrays.copyOf(value, newCapacity);
+    }
+
+【StringBuffer】
+也继承了AbstractStringBuilder
+
+append(String)逻辑和StringBuilder一样，不过多了synchronized
+public synchronized StringBuffer append(String str) {
+        super.append(str);
+        return this;
+    }

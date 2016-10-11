@@ -23,3 +23,7 @@ Usage: memcached-tool <host[:port] | /path/to/socket> [mode]
   #  Item_Size  Max_age  Pages  Count  Full?  Evicted Evict_Time OOM
   1      96B       216s       1       2      no        0        0    0
  22    10.8K       216s       1       1      no        0        0    0
+
+
+ 3. 如何遍历mamcache中的数据
+ telnet {IP} {PORT}连上之后，用 stats slabs找到需要观察的slab class

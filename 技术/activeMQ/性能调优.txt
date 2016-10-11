@@ -1,0 +1,39 @@
+1. 使用非持久化消息
+
+2. 使用batch方式批量发送消息
+
+3. 使用内嵌式的broker，省下序列化和传输的开销
+
+4. 异步发送。消息生产者不用等待broker回复是否发送成功。
+
+5. Producer flow control
+Blocking the transport will block all users of the connection, which
+can lead to deadlock if the message consumers are sharing the connection. Producer
+flow control allows blocking only the producer rather than the entire connection.
+
+6. consumer的prefetch limit
+代码方式
+ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
+Properties props = new Properties();
+props.setProperty("prefetchPolicy.queuePrefetch", "1000");
+props.setProperty("prefetchPolicy.queueBrowserPrefetch", "500");
+props.setProperty("prefetchPolicy.durableTopicPrefetch", "100");
+props.setProperty("prefetchPolicy.topicPrefetch", "32766");
+cf.setProperties(props);
+
+配置方式
+Or you can pass the prefetch size as a destination property when you create a
+destination:
+Queue queue = new ActiveMQQueue("TEST.QUEUE?consumer.prefetchSize=10");
+MessageConsumer consumer = session.createConsumer(queue);
+
+7. 消息确认的优化
+When using optimizeAcknowledge or the DUPS_OK_ACKNOWLEDGE acknowledgment
+mode on a session, the message consumer can send one message acknowledgment
+to the ActiveMQ message broker containing a range of all the messages
+consumed.
+The downside to not acknowledging every message individually is that if the message
+consumer were to lose its connection with the ActiveMQ broker for any reason, then
+your messaging application could receive duplicate messages.
+
+8. Asynchronous dispatch

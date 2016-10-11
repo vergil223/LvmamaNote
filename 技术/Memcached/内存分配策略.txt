@@ -15,4 +15,6 @@ item被检测到超时并不会被删除，而是放入slab->slots头部；
   b.slab->end_page_ptr 最后一个页面的空闲item； 
   c.分配新的内存页
 
-也就是说，只有LRU最后的5个元素状态为expired时，才有机会直接重用LRU，否则会依次尝试expired item list和slab的最后一个内存页的free item；
+也就是说，只有LRU最后的5个元素状态为expired时，才有机会直接重用LRU，否则会依次尝试expired item list和slab的最后一个内存页的free item。
+
+最后，如果LRU队尾没有过期数据，过期队列slot里也没有过期数据，slab里没有空闲chunk，也没有空闲内存申请新的slab。这时会根据配置来决定直接拒绝写入，还是把LRU队尾的数据踢掉（Evicted会+1）。

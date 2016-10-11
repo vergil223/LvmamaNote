@@ -1,0 +1,8 @@
+用zkCli.cmd查看服务提供者：
+zkCli.cmd -server localhost:2181
+
+ls /dubbo/com.lvmama.comm.bee.service.sync.SyncBaseService/providers
+
+
+zookeeper服务器都运行正常，而客户端连接异常：
+修改zookeeper安装目录下 conf/zoo.cfg文件。将maxClientCnxns参数改成更大的值。

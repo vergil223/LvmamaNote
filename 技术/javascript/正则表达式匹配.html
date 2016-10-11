@@ -1,0 +1,15 @@
+<script type="text/javascript">
+var reg=/_COPY$|_\d*$/;
+var str01="aaa_COPY";
+
+alert(str01+":"+reg.test(str01));
+
+alert("total length:"+str01.length);
+alert("surfix:"+str01.match(reg));
+
+var surfixLength=str01.match(reg)[0].length;
+alert("surfix length:"+);
+alert("after remove surfix:"+str01.substr(0,3))
+
+
+</script>

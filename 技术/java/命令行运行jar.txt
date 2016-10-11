@@ -1,0 +1,4 @@
+linux下：
+nohup java -server -Xmx2g -Xms2g -classpath '.:./lib/*:./ng_log_manager-0.0.1-SNAPSHOT.jar' com.lvmama.nglog.main.MainStarter &
+
+windows下多个路径的分隔符改成;

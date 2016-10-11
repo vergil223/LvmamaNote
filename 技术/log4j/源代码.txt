@@ -1,0 +1,31 @@
+log4j 1_2_17 代码：
+
+创建log类：
+Logger.getLogger(class);
+public
+  static 
+  Logger getLogger(final String name) {
+     // Delegate the actual manufacturing of the logger to the logger repository.
+    return getLoggerRepository().getLogger(name);
+  }
+
+LogManager静态初始化：
+Hierarchy h = new Hierarchy(new RootLogger((Level) Level.DEBUG));
+
+加载properties里的配置
+PropertyConfigurator.doConfigure(Properties properties, LoggerRepository hierarchy){
+
+configureRootCategory(properties, hierarchy);
+	parseCategory(props, root（new RootLogger((Level) Level.DEBUG)）, effectiveFrefix(rootLogger), INTERNAL_ROOT_NAME(root), value(INFO, lvmamaconsole));//设置rootLogger的level，解析appender
+	
+configureLoggerFactory(properties);//如果配置了log4j.loggerFactory的话，就创建loggerFactory对象，并且把log4j.factory开头的属性设置进去
+
+parseCatsAndRenderers(properties, hierarchy);//解析log4j.logger.(还有log4j.category. ， log4j.renderer. ， log4j.throwableRenderer)开头的配置
+	
+	hierarchy.getLogger(loggerName, loggerFactory);	//按照log4j.logger.后面的报名和类名创建logger对象，这里还会处理logger之间的父子关系，由包名和类名决定
+
+	parseCategory(props, logger（hierarchy.getLogger(loggerName, loggerFactory)）, key, loggerName, value);//设置当前当前loggerName相关的logger的level，解析appender(如果专门配置过的话)
+	parseAdditivityForLogger(props, logger（hierarchy.getLogger(loggerName, loggerFactory)）, loggerName);//解析和当前loggerName相关的log4j.additivity.开头的属性
+}
+
+

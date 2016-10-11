@@ -1,4 +1,6 @@
-把memcached-tool放到linux上，用perl memcached-tool {IP}:{PORT}查看memcache的情况
+1. 直接用telnet {IP} {PORT}，然后执行stats slabs，可以看到slabs分配情况，不过可读性不高。
+
+2. 把memcached-tool放到linux上，用perl memcached-tool {IP}:{PORT}查看memcache的情况
 
 说明：
 Usage: memcached-tool <host[:port] | /path/to/socket> [mode]

@@ -1,0 +1,1 @@
+PilotEdit Lite工具可以用来在windows下打开其他工具无法打开的大文本文件

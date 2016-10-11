@@ -1,0 +1,88 @@
+【准备工作】
+twemproxy的安装要求autoconf的版本在2.64以上，否则提示”error: Autoconf version 2.64 or higher is required“
+
+升级安装autoconf
+autoconf下载地址：http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+
+centos下升级autoconf 
+#whereis autoconf #查看autoconf的路径 
+#rpm -qf /usr/bin/autoconf #查看autoconf的版本
+#rpm -e --nodeps autoconf-2.59-12 #卸载原来版本
+#tar -zxf autoconf-2.65.tar.gz
+#cd autoconf-2.65
+#./configure --prefix=/usr
+#make && make install
+#rpm -qf /usr/bin/autoconf
+#rpm -qa | grep autoconf
+#/usr/bin/autoconf --help
+#/usr/bin/autoconf -V #查看是否安装成功
+
+
+【安装twemproxy】
+1. 从github下载稳定版本,上传到/opt下解压
+
+2. 安装
+   $ cd twemproxy
+   $ sudo autoreconf -fvi
+   $ sudo ./configure --enable-debug=full
+   $ sudo make
+   $ sudo make install
+
+3. 修改配置：conf/nutcracker.yml: 
+alpha:
+  listen: 172.17.12.107:22121
+  hash: fnv1a_64
+  distribution: ketama
+  auto_eject_hosts: true
+  redis: true
+  server_retry_timeout: 2000
+  server_failure_limit: 1
+  servers:
+   - 172.17.12.106:6379:1
+   - 172.17.12.107:6379:1
+
+验证配置文件： nutcracker -t conf/nutcracker.yml 
+(测试的时候一直报invalid，但似乎不影响启动)
+
+4. 启动twemproxy
+nutcracker -d -c conf/nutcracker.yml
+-d 作为守护进程运行
+-c 指定使用的配置文件
+
+用windows redis客户端程序似乎连不上twemproxy，但直接用redis-cli -h 172.17.12.107 -p 22121命令可以
+
+【测试】
+性能测试
+这里使用redis自带的redis-benchmark进行简单的性能测试，测试结果如下:
+
+1.Set测试：
+1.通过twemproxy测试： 
+[lvmama_admin@server12-107 conf]$ redis-benchmark -h 172.17.12.107 -p 22121 -c 100 -t set -d 100  -q
+SET: 19512.20 requests per second
+2.直接对后端redis测试： 
+# redis-benchmark -h 172.17.12.107 -p 6379 -c 100 -t set -d 100 -l -q
+SET: 53191.49 requests per second
+
+2.Get测试：
+1.通过twemproxy测试： 
+# redis-benchmark -h 172.17.12.107 -p 22121 -c 100 -t get -d 100 -l -q
+GET: 37453.18 requests per second
+2.直接对后端redis测试： 
+# redis-benchmark -h 172.17.12.107 -p 6379 -c 100 -t get -d 100 -l -q
+GET: 62111.80 requests per second
+
+3.查看键值分布： 
+172.17.12.106
+# redis-cli -h 172.17.12.106 -p 6379 info|grep db0
+db0:keys=51483,expires=0,avg_ttl=0
+
+172.17.12.107
+# redis-cli -h 172.17.12.107 -p 6379 info|grep db0
+db0:keys=48525,expires=0,avg_ttl=0
+
+测试结果:以基本的set get命令通过twemproxy性能有所下降;通过twemproxy分布基本平均。测试数据以业务测试为准。
+
+
+
+
+

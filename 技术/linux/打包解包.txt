@@ -1,0 +1,6 @@
+解包：tar zxvf FileName.tar
+打包：tar czvf FileName.tar DirName
+
+解压：tar zxvf FileName.tar.gz
+压缩：tar zcvf FileName.tar.gz DirName
+压缩多个文件：tar zcvf FileName.tar.gz DirName1 DirName2 DirName3 ...

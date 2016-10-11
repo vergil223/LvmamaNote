@@ -1,0 +1,84 @@
+【CountDownLatch】
+构造函数：
+public CountDownLatch(int count) {
+        if (count < 0) throw new IllegalArgumentException("count < 0");
+        this.sync = new Sync(count);
+    }
+创建了一个Sync对象，Sync的定义：
+private static final class Sync extends AbstractQueuedSynchronizer {
+        private static final long serialVersionUID = 4982264981922014374L;
+
+        Sync(int count) {
+            setState(count);
+        }
+
+        int getCount() {
+            return getState();
+        }
+        
+	//被await()方法调用，如果state已经被减到1了就返回，否则doAcquireSharedInterruptibly内部会一直循环检查
+        protected int tryAcquireShared(int acquires) {
+            return (getState() == 0) ? 1 : -1;
+        }
+
+	//被countDown()方法调用,每次把state减1
+        protected boolean tryReleaseShared(int releases) {
+            // Decrement count; signal when transition to zero
+            for (;;) {
+                int c = getState();
+                if (c == 0)
+                    return false;
+                int nextc = c-1;
+                if (compareAndSetState(c, nextc))
+                    return nextc == 0;
+            }
+        }
+    }
+ 
+关键方法逻辑：
+public void await() throws InterruptedException {
+        sync.acquireSharedInterruptibly(1);
+    }
+
+public void countDown() {
+        sync.releaseShared(1);
+    }
+
+
+
+/** waitStatus value to indicate thread has cancelled */
+        static final int CANCELLED =  1;
+        /** waitStatus value to indicate successor's thread needs unparking */
+        static final int SIGNAL    = -1;
+        /** waitStatus value to indicate thread is waiting on condition */
+        static final int CONDITION = -2;
+        /**
+         * waitStatus value to indicate the next acquireShared should
+         * unconditionally propagate
+         */
+        static final int PROPAGATE = -3;
+/**
+         * Status field, taking on only the values:
+         *   SIGNAL:     The successor of this node is (or will soon be)
+         *               blocked (via park), so the current node must
+         *               unpark its successor when it releases or
+         *               cancels. To avoid races, acquire methods must
+         *               first indicate they need a signal,
+         *               then retry the atomic acquire, and then,
+         *               on failure, block.
+         *   CANCELLED:  This node is cancelled due to timeout or interrupt.
+         *               Nodes never leave this state. In particular,
+         *               a thread with cancelled node never again blocks.
+         *   CONDITION:  This node is currently on a condition queue.
+         *               It will not be used as a sync queue node
+         *               until transferred, at which time the status
+         *               will be set to 0. (Use of this value here has
+         *               nothing to do with the other uses of the
+         *               field, but simplifies mechanics.)
+         *   PROPAGATE:  A releaseShared should be propagated to other
+         *               nodes. This is set (for head node only) in
+         *               doReleaseShared to ensure propagation
+         *               continues, even if other operations have
+         *               since intervened.
+         *   0:          None of the above
+         *

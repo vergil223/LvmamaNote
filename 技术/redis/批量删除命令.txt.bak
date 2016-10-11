@@ -1,0 +1,4 @@
+删除所有以20151112_com开头的KEY:
+redis-cli KEYS "*com.lvmama.soa.monitor*"|xargs redis-cli DEL
+
+redis-cli -h 192.168.0.55 -p 6380 KEYS "*com.lvmama.soa.monitor*"|xargs redis-cli DEL -h 192.168.0.55 -p 6380
